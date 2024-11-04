@@ -69,6 +69,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::position.position"
+    },
+    "cart": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cart.cart",
+      "inversedBy": "users_permissions_users"
     }
   }
 }

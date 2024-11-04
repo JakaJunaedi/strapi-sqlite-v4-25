@@ -775,6 +775,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToOne',
       'api::position.position'
     >;
+    cart: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToOne',
+      'api::cart.cart'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -821,6 +826,41 @@ export interface ApiCarouselCarousel extends Schema.CollectionType {
       'oneToOne',
       'admin::user'
     > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCartCart extends Schema.CollectionType {
+  collectionName: 'carts';
+  info: {
+    singularName: 'cart';
+    pluralName: 'carts';
+    displayName: 'cart';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    quantity: Attribute.Integer;
+    amount: Attribute.Integer;
+    userId: Attribute.Integer;
+    products: Attribute.Relation<
+      'api::cart.cart',
+      'oneToMany',
+      'api::product.product'
+    >;
+    users_permissions_users: Attribute.Relation<
+      'api::cart.cart',
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::cart.cart', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::cart.cart', 'oneToOne', 'admin::user'> &
       Attribute.Private;
   };
 }
@@ -915,6 +955,11 @@ export interface ApiProductProduct extends Schema.CollectionType {
     >;
     description: Attribute.Text;
     itemQuantityType: Attribute.String;
+    cart: Attribute.Relation<
+      'api::product.product',
+      'manyToOne',
+      'api::cart.cart'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -952,6 +997,7 @@ declare module '@strapi/types' {
       'plugin::users-permissions.role': PluginUsersPermissionsRole;
       'plugin::users-permissions.user': PluginUsersPermissionsUser;
       'api::carousel.carousel': ApiCarouselCarousel;
+      'api::cart.cart': ApiCartCart;
       'api::category.category': ApiCategoryCategory;
       'api::position.position': ApiPositionPosition;
       'api::product.product': ApiProductProduct;
